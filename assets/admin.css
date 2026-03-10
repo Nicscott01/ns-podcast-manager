@@ -1,0 +1,9 @@
+.ns-pm-settings h2 {
+	border-bottom: 1px solid #dcdcde;
+	padding-bottom: 8px;
+	margin-top: 28px;
+}
+
+.ns-pm-settings .form-table th {
+	width: 220px;
+}
