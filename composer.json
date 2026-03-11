@@ -8,5 +8,8 @@
             "email": "nic@crearewebsolutions.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+
 }
