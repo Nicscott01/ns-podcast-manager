@@ -3,7 +3,7 @@
  * Plugin Name: NS Podcast Manager
  * Plugin URI:  https://github.com/nscott/ns-podcast-manager
  * Description: Reusable podcast CPT with ACF fields and a settings page. Drop in, configure, go.
- * Version:     1.0.0
+ * Version:     1.0.1
  * Author:      Nic Scott
  * License:     GPL-2.0-or-later
  * Text Domain: ns-podcast-manager
@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NS_PM_VERSION', '1.0.0' );
+define( 'NS_PM_VERSION', '1.0.1' );
 define( 'NS_PM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NS_PM_URL', plugin_dir_url( __FILE__ ) );
 
@@ -19,6 +19,7 @@ require_once NS_PM_DIR . 'includes/class-settings.php';
 require_once NS_PM_DIR . 'includes/class-rewrites.php';
 require_once NS_PM_DIR . 'includes/class-cpt.php';
 require_once NS_PM_DIR . 'includes/class-acf-fields.php';
+require_once NS_PM_DIR . 'includes/class-dynamic-data.php';
 
 /**
  * Returns the plugin options with defaults merged in.
@@ -58,3 +59,5 @@ add_action( 'plugins_loaded', function () {
 	NS_PM_CPT::init();
 	NS_PM_ACF_Fields::init();
 } );
+
+add_action( 'init', [ 'NS_PM_Dynamic_Data', 'init' ] );
