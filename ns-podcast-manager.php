@@ -3,7 +3,7 @@
  * Plugin Name: NS Podcast Manager
  * Plugin URI:  https://github.com/nscott/ns-podcast-manager
  * Description: Reusable podcast CPT with ACF fields and a settings page. Drop in, configure, go.
- * Version:     1.0.1
+ * Version:     1.0.2
  * Author:      Nic Scott
  * License:     GPL-2.0-or-later
  * Text Domain: ns-podcast-manager
@@ -11,7 +11,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NS_PM_VERSION', '1.0.1' );
+define( 'NS_PM_VERSION', '1.0.2' );
 define( 'NS_PM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'NS_PM_URL', plugin_dir_url( __FILE__ ) );
 
@@ -51,7 +51,12 @@ function ns_pm_options(): array {
 	return wp_parse_args( $saved, $defaults );
 }
 
-register_activation_hook( __FILE__, [ 'NS_PM_Rewrites', 'flush' ] );
+register_activation_hook( __FILE__, function () {
+	// init has already run in this request, so the CPT isn't registered yet.
+	// Register it manually first so the flush captures its rewrite rules.
+	NS_PM_CPT::register();
+	flush_rewrite_rules();
+} );
 register_deactivation_hook( __FILE__, [ 'NS_PM_Rewrites', 'flush' ] );
 
 add_action( 'plugins_loaded', function () {

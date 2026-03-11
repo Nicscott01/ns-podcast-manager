@@ -31,7 +31,7 @@ class NS_PM_Rewrites {
 	}
 
 	/**
-	 * Hard flush — only for activation/deactivation hooks where timing is safe.
+	 * Hard flush — used on deactivation.
 	 */
 	public static function flush(): void {
 		flush_rewrite_rules();
