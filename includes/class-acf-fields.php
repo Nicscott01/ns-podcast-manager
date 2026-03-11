@@ -68,13 +68,24 @@ class NS_PM_ACF_Fields {
 		];
 		$order += 10;
 
-		// Audio URL
+		// Audio Player (oEmbed)
 		$fields[] = [
 			'key'          => 'field_ns_pm_audio_url',
-			'label'        => __( 'Audio URL', 'ns-podcast-manager' ),
+			'label'        => __( 'Audio Player', 'ns-podcast-manager' ),
 			'name'         => 'audio_url',
-			'type'         => 'url',
-			'instructions' => __( 'Direct link to the audio file or CDN URL.', 'ns-podcast-manager' ),
+			'type'         => 'oembed',
+			'instructions' => __( 'Paste the share URL from your podcast host (Spotify, Buzzsprout, Podbean, SoundCloud, etc.) — WordPress will embed the player automatically.', 'ns-podcast-manager' ),
+			'menu_order'   => $order,
+		];
+		$order += 10;
+
+		// Video Player (oEmbed)
+		$fields[] = [
+			'key'          => 'field_ns_pm_video_embed_url',
+			'label'        => __( 'Video Player', 'ns-podcast-manager' ),
+			'name'         => 'video_embed_url',
+			'type'         => 'oembed',
+			'instructions' => __( 'Paste the YouTube, Vimeo, or other video share URL — WordPress will embed the player automatically.', 'ns-podcast-manager' ),
 			'menu_order'   => $order,
 		];
 		$order += 10;

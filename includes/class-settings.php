@@ -8,8 +8,10 @@ class NS_PM_Settings {
 	public static function init(): void {
 		add_action( 'admin_menu', [ __CLASS__, 'add_page' ] );
 		add_action( 'admin_init', [ __CLASS__, 'register_settings' ] );
-		add_action( 'update_option_' . self::OPTION_KEY, [ __CLASS__, 'maybe_flush_rewrites' ], 10, 2 );
+		add_action( 'update_option_' . self::OPTION_KEY, [ __CLASS__, 'maybe_schedule_flush' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueue_assets' ] );
+		add_action( 'admin_notices', [ __CLASS__, 'flush_notice' ] );
+		NS_PM_Rewrites::init();
 	}
 
 	public static function add_page(): void {
@@ -168,10 +170,25 @@ class NS_PM_Settings {
 		return $clean;
 	}
 
-	public static function maybe_flush_rewrites( $old, $new ): void {
+	public static function maybe_schedule_flush( $old, $new ): void {
 		if ( ( $old['cpt_slug'] ?? '' ) !== ( $new['cpt_slug'] ?? '' ) ) {
-			NS_PM_Rewrites::flush();
+			// Don't flush here — init has already run with the old slug.
+			// Schedule a flush for the next request, after the CPT registers with the new slug.
+			NS_PM_Rewrites::schedule();
+			set_transient( 'ns_pm_slug_changed', '1', 30 );
 		}
+	}
+
+	public static function flush_notice(): void {
+		if ( ! get_transient( 'ns_pm_slug_changed' ) ) {
+			return;
+		}
+		delete_transient( 'ns_pm_slug_changed' );
+		?>
+		<div class="notice notice-success is-dismissible">
+			<p><?php esc_html_e( 'Podcast Manager: URL slug updated. Permalinks have been flushed automatically.', 'ns-podcast-manager' ); ?></p>
+		</div>
+		<?php
 	}
 
 	public static function render_page(): void {
